@@ -1,23 +1,26 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
-import { CheckCircle2, XCircle, Eye, EyeOff } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { CheckCircle2, XCircle, Eye, EyeOff } from 'lucide-react';
 
 const formSchema = z.object({
   username: z.string().min(1, 'Username is required'),
-  password: z.string()
+  password: z
+    .string()
     .min(3, 'Password must be at least 3 characters')
     .max(9, 'Password must not exceed 9 characters')
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,9}$/, 
-      'Password must contain uppercase, lowercase, number and special character')
-})
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{3,9}$/,
+      'Password must contain uppercase, lowercase, number and special character'
+    ),
+});
 
 type PasswordCriteria = {
   minLength: boolean;
@@ -26,21 +29,21 @@ type PasswordCriteria = {
   hasLowercase: boolean;
   hasNumber: boolean;
   hasSpecialChar: boolean;
-}
+};
 
 export default function LoginForm() {
-  const [showSuccessModal, setShowSuccessModal] = useState(false)
-  const [showErrorModal, setShowErrorModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [passwordCriteria, setPasswordCriteria] = useState<PasswordCriteria>({
     minLength: false,
     maxLength: true,
     hasUppercase: false,
     hasLowercase: false,
     hasNumber: false,
-    hasSpecialChar: false
-  })
-  const [showCriteria, setShowCriteria] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
+    hasSpecialChar: false,
+  });
+  const [showCriteria, setShowCriteria] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,36 +51,36 @@ export default function LoginForm() {
       username: '',
       password: '',
     },
-  })
+  });
 
-  const password = form.watch('password')
+  const password = form.watch('password');
 
   useEffect(() => {
     if (password) {
-      setShowCriteria(true)
+      setShowCriteria(true);
       setPasswordCriteria({
         minLength: password.length >= 3,
         maxLength: password.length <= 9,
         hasUppercase: /[A-Z]/.test(password),
         hasLowercase: /[a-z]/.test(password),
         hasNumber: /\d/.test(password),
-        hasSpecialChar: /[@$!%*?&]/.test(password)
-      })
+        hasSpecialChar: /[@$!%*?&]/.test(password),
+      });
     } else {
-      setShowCriteria(false)
+      setShowCriteria(false);
     }
-  }, [password])
+  }, [password]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.username === 'Sayan123' && values.password === 'Sayan@1') {
-      setShowSuccessModal(true)
+      setShowSuccessModal(true);
     } else {
-      setShowErrorModal(true)
+      setShowErrorModal(true);
     }
   }
 
-  const CriteriaIcon = ({ met }: { met: boolean }) => 
-    met ? <CheckCircle2 className="text-green-500" /> : <XCircle className="text-red-500" />
+  const CriteriaIcon = ({ met }: { met: boolean }) =>
+    met ? <CheckCircle2 className="text-green-500" /> : <XCircle className="text-red-500" />;
 
   return (
     <>
@@ -104,16 +107,14 @@ export default function LoginForm() {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Input 
-                      type={showPassword ? "text" : "password"} 
-                      placeholder="Enter your password" 
-                      {...field} 
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      {...field}
                     />
-                    <Button
+                    <button
                       type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
@@ -122,9 +123,9 @@ export default function LoginForm() {
                         <Eye className="h-4 w-4" />
                       )}
                       <span className="sr-only">
-                        {showPassword ? "Hide password" : "Show password"}
+                        {showPassword ? 'Hide password' : 'Show password'}
                       </span>
-                    </Button>
+                    </button>
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -159,7 +160,9 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">Login</Button>
+          <Button type="submit" className="w-full">
+            Login
+          </Button>
         </form>
       </Form>
 
@@ -187,6 +190,5 @@ export default function LoginForm() {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-
