@@ -69,7 +69,7 @@ export default function LoginForm() {
   }, [password])
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.username === 'koushik123' && values.password === 'Koushik@123') {
+    if (values.username === 'Sayan123' && values.password === 'Sayan@1') {
       setShowSuccessModal(true)
     } else {
       setShowErrorModal(true)
